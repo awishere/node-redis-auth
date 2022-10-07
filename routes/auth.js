@@ -1,28 +1,37 @@
 var express = require('express');
 var router = express.Router();
+const User = require('../models/users');
 const tempDB=[];
 
 /* GET users listing. */
-router.post('/register', function(req, res) {
+router.post('/register', async(req, res)=> {
 const {username,password}=req.body;
-const existingUser=tempDB.find((user)=> user.username === username);
+const existingUser= await User.findOne({username});
 if(existingUser){
   return res.status(400).json({
     message:"User already Exists"
   })
 }
-const user={
-  username,
-  password
-};
-tempDB.push(user)
-req.session.user=user;
+try{
+  const savedUser = await new User({
+    username,
+    password
+  }).save();
+  const user = savedUser.toJSON();
+  req.session.user=user
+  delete user.password;
   res.status(200).json({
-    user
+    user: user
   });
+} catch(e){
+  res.status(400).json({
+    message: err.message
+  })
+}
+
 });
 
-router.post('/login', function(req, res) {
+router.post('/login', async (req, res)=> {
   const {username,password}=req.body;
   const existingUser=tempDB.find((user)=> user.username === username);
   if(!existingUser){
