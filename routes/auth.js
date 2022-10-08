@@ -33,18 +33,32 @@ try{
 
 router.post('/login', async (req, res)=> {
   const {username,password}=req.body;
-  const existingUser=tempDB.find((user)=> user.username === username);
+  const existingUser= await User.findOne({username});
   if(!existingUser){
     return res.status(400).json({
       message:"User does not exist"
     })
-  }else if(existingUser.password != password){
+  }else if(!existingUser.comparePassword(password)){
     return res.status(400).json({
       "message":"Incorrect Password"
     })
   } 
+  const user =existingUser.toJSON();
+  delete user.password;
+   req.session.user=user;
     res.status(200).json({
-      user:existingUser
+     user
     });
   });
+
+router.get('/logout', async (req, res)=> {
+   req.session.destroy((err)=>{
+    if(err){
+      return res.status(400).json({
+        message:err.message
+      })
+    }
+    res.redirect('/login');
+   });
+    });
 module.exports = router;

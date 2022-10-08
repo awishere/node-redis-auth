@@ -7,6 +7,8 @@ require('dotenv').config();
 require('./dbConnect')();
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
+const gamesRouter = require('./routes/games');
+
 const {createClient}= require('redis');
 const connectRedis = require('connect-redis');
 const { RedisClient } = require('redis');
@@ -37,16 +39,7 @@ const sessionConfig={
 app.use(session(sessionConfig));
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
-app.use('/hello',(req,res)=>{
-    if(req.session.viewCount === undefined){
-        req.session.viewCount =0;
-    }else{
-        req.session.viewCount++;
-    }
-    res.json({viewCount: 'View Count is : '+ req.session.viewCount});
-  
-}
-);
+app.use('/games', gamesRouter);
 app.use(express.static(path.join(__dirname, 'public')));
 
 module.exports = app;

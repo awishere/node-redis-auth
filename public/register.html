@@ -12,27 +12,18 @@
  <main>
  <div class="container">
         <form id="form" class="form">
-            <h2>Register With Us</h2>
+            <h2>Register</h2>
             <div class="form-control">
                 <label for="username">Username</label>
                 <input type="text" id="username" placeholder="Enter Username">
                 <small>Error Message</small>
             </div>
-            <div class="form-control">
-                <label for="email">Email</label>
-                <input type="text" id="email" placeholder="Enter email">
-                <small>Error Message</small>
-            </div>
+          
             <div class="form-control">
                 <label for="password">Password</label>
                 <input type="password" id="password" placeholder="Enter password">
                 <small>Error Message</small>
-            </div>
-            <div class="form-control">
-                <label for="password2">Confirm Password</label>
-                <input type="password" id="password2" placeholder="Enter password again">
-                <small>Error Message</small>
-            </div>
+         
             <button>Submit</button>
         </form>
     </div>
@@ -41,10 +32,10 @@
   
 <script>
 const form = document.getElementById('form');
-const username = document.getElementById('username');
-const email = document.getElementById('email');
-const password = document.getElementById('password');
-const password2 = document.getElementById('password2');
+const user= document.getElementById('username');
+const pass = document.getElementById('password');
+
+
 
 //Show input error messages
 function showError(input, message) {
@@ -74,7 +65,7 @@ function checkEmail(input) {
 //checkRequired fields
 function checkRequired(inputArr) {
     inputArr.forEach(function(input){
-        if(input.value.trim() === ''){
+        if(input.value.trim() == ''){
             showError(input,`${getFieldName(input)} is required`)
         }else {
             showSucces(input);
@@ -99,23 +90,46 @@ function getFieldName(input) {
     return input.id.charAt(0).toUpperCase() + input.id.slice(1);
 }
 
-// check passwords match
-function checkPasswordMatch(input1, input2) {
-    if(input1.value !== input2.value) {
-        showError(input2, 'Passwords do not match');
-    }
+const onFormSubmit = async({
+      username,
+      password
+  }) =>{
+    const options = {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+  body: JSON.stringify({
+    username,
+    password
+  })
+};
+try{
+  const resp = await fetch('/auth/register', options);
+  const body = await resp.json();
+  if(resp.status != 200){
+    return alert(body.message);
+  }
+  if(body?.user){
+  window.location.href='/';
+  }
+
+}catch(e){
+alert(e.message);
 }
 
+  }
 
 //Event Listeners
-form.addEventListener('submit',function(e) {
+form.addEventListener('submit',(e)=>{
     e.preventDefault();
-
-    checkRequired([username, email, password, password2]);
-    checkLength(username,3,15);
-    checkLength(password,6,25);
-    checkEmail(email);
-    checkPasswordMatch(password, password2);
+    checkRequired([user,pass]);
+    checkLength(user,3,15);
+    checkLength(pass,6,25);
+    const username = user.value;
+    const password = pass.value;
+    onFormSubmit({
+    username,
+    password
+   })
 });      
       
 </script>
