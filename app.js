@@ -7,7 +7,7 @@ require('dotenv').config();
 require('./dbConnect')();
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
-const gamesRouter = require('./routes/games');
+const languagesRouter = require('./routes/languages');
 
 const {createClient}= require('redis');
 const connectRedis = require('connect-redis');
@@ -39,7 +39,7 @@ const sessionConfig={
 app.use(session(sessionConfig));
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
-app.use('/games', gamesRouter);
+app.use('/languages', languagesRouter);
 app.use(express.static(path.join(__dirname, 'public')));
 
 module.exports = app;

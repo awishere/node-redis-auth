@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const User = require('../models/users');
-const tempDB=[];
+
 
 /* GET users listing. */
 router.post('/register', async(req, res)=> {
