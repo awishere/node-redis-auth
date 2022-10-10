@@ -17,7 +17,12 @@ const { RedisClient } = require('redis');
 const e = require('express');
 const redisClient= createClient({
     url:process.env.REDIS_URL,
-    legacyMode:true});
+    socket: {
+        tls: true,
+        rejectUnauthorized: false
+      },
+    legacyMode:true
+});
 
 require('dotenv').config();
 
