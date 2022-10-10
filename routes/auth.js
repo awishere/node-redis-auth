@@ -26,7 +26,7 @@ try{
   });
 } catch(e){
   res.status(400).json({
-    message: err.message
+    message: e.message
   })
 }
 
