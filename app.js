@@ -8,12 +8,16 @@ require('./dbConnect')();
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const languagesRouter = require('./routes/languages');
+const FavouriteLanguageRouter = require('./routes/favouriteLanguages');
+
 
 const {createClient}= require('redis');
 const connectRedis = require('connect-redis');
 const { RedisClient } = require('redis');
 const e = require('express');
-const redisClient= createClient({legacyMode:true});
+const redisClient= createClient({
+    url:process.env.REDIS_URL,
+    legacyMode:true});
 
 require('dotenv').config();
 
@@ -40,6 +44,8 @@ app.use(session(sessionConfig));
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/languages', languagesRouter);
+app.use('/favourite-languages', FavouriteLanguageRouter);
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 module.exports = app;

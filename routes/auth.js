@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const User = require('../models/users');
+const authenticated = require('../middleware/auth.middleware');
 
 
 /* GET users listing. */
@@ -50,7 +51,13 @@ router.post('/login', async (req, res)=> {
      user
     });
   });
-
+  router.get('/me', async (req, res)=> {
+    const { username } = req.session.user;
+    const user = await User.findOne({username},{password:0});
+    res.status(200).json({
+      user
+    })
+     });
 router.get('/logout', async (req, res)=> {
    req.session.destroy((err)=>{
     if(err){
