@@ -1,37 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+    
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Form Validation in JavaScript Example</title>
+    <title>Register</title>
     
-    <link rel="stylesheet" href="stylesheets/regStyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel="stylesheet" href="stylesheets/style.css">
+
   </head>
   <body>
  
  <main>
- <div class="container">
-        <form id="form" class="form">
-            <h2>Register</h2>
-            <div class="form-control">
-                <label for="username">Username</label>
-                <input type="text" id="username" placeholder="Enter Username">
-                <small>Error Message</small>
-            </div>
-          
-            <div class="form-control">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter password">
-                <small>Error Message</small>
-         
-            <button>Submit</button>
-        </form>
-    </div>
+    <div id="login-form-wrap">
+  <h2>Register</h2>
+  <form id="login-form" class="login-form">
+    <p>
+    <input type="text" id="username" name="username" placeholder="Username" required><i class="validation"><span></span><span></span></i>
+    </p>
+    <p>
+    <input type="password" id="password" name="password" autocomplete="on" placeholder="Password" required><i class="validation"><span></span><span></span></i>
+    </p>
+    <p>
+    <button>Submit</button>
+    </p>
+    &nbsp
+   
+  </form>
+</div>
  </main>
  
   
 <script>
-const form = document.getElementById('form');
+const form = document.getElementById('login-form');
 const user= document.getElementById('username');
 const pass = document.getElementById('password');
 
